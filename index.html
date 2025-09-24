@@ -160,7 +160,7 @@
     ];
     const comoConheceu = [
       { id: 1, nome: 'Google',         descricao: 'Pesquisou no Google',       inicial: 'G' },
-      { id: 2, nome: 'Redes Sociais',  descricao: 'Instagram, Facebook, etc.', inicial: 'R' },
+      { id: 2, nome: 'Instagram',  descricao: 'Viu no Instagram.', inicial: 'R' },
       { id: 3, nome: 'Indicação',      descricao: 'Amigos ou conhecidos',      inicial: 'I' },
       { id: 4, nome: 'Passei na Porta',descricao: 'Viu a loja fisicamente',    inicial: 'P' },
       { id: 5, nome: 'TikTok',         descricao: 'Vídeos no TikTok',          inicial: 'T' }
@@ -286,20 +286,20 @@
 }
 
     function createComoConheceuStep() {
-      let html = '<h2 class="step-title">Como nos conheceu?</h2>';
-      html += '<div class="options-grid">';
-      comoConheceu.forEach(opt => {
-        html += `
-          <div class="option-card" onclick="__selectComoConheceu(${opt.id})">
-            <div class="option-icon">${opt.inicial}</div>
-            <div class="option-name">${opt.nome}</div>
-            <div class="option-desc">${opt.descricao}</div>
-          </div>
-        `;
-      });
-      html += '</div>';
-      return html;
-    }
+  let html = '<h2 class="step-title">Como nos conheceu?</h2>';
+  html += '<div class="options-grid">';
+  comoConheceu.forEach(opt => {
+    html += `
+      <div class="option-card" onclick="__selectComoConheceu(${opt.id})">
+        <img src="${opt.nome}.png" alt="${opt.nome}" style="width:48px;height:48px;border-radius:15px;object-fit:cover;margin-bottom:10px;border:2px solid #007bff;">
+        <div class="option-name">${opt.nome}</div>
+        <div class="option-desc">${opt.descricao}</div>
+      </div>
+    `;
+  });
+  html += '</div>';
+  return html;
+}
 
     function createRatingsStep() {
       let html = '<h2 class="step-title">Avalie nossos serviços</h2>';
