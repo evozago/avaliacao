@@ -8,55 +8,74 @@
     *{margin:0;padding:0;box-sizing:border-box}
     body{
       font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      background:linear-gradient(135deg,#FFE5F1 0%,#E8F4FD 50%,#FFF2E5 100%);
       min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
     }
     .container{
       background:#fff;border-radius:20px;box-shadow:0 20px 40px rgba(0,0,0,.1);
-      padding:40px;max-width:800px;width:100%;text-align:center
+      padding:40px;max-width:1000px;width:100%;text-align:center;
+      max-height:90vh;overflow-y:auto;
     }
-    .header{margin-bottom:30px}
+    .header{margin-bottom:20px}
     .header h1{color:#333;font-size:2.5em;margin-bottom:10px}
     .header p{color:#666;font-size:1.2em}
-    .progress-bar{background:#f0f0f0;border-radius:10px;height:10px;margin:30px 0;overflow:hidden}
-    .progress-fill{background:linear-gradient(90deg,#4CAF50,#45a049);height:100%;transition:width .3s ease;border-radius:10px}
-    .step-info{color:#666;margin-bottom:20px;font-size:1.1em}
-    .step-content{margin:40px 0}
-    .step-title{font-size:2em;color:#333;margin-bottom:30px}
-    .options-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin:30px 0}
     
-    /* ALTERAÇÕES NO TAMANHO DO QUADRO AQUI */
-    .option-card{
-      background:#f8f9fa;border:3px solid #e9ecef;border-radius:15px;padding:30px;cursor:pointer;
-      transition:all .3s ease;min-height:180px;aspect-ratio: 1 / 1;display:flex;flex-direction:column;align-items:center;justify-content:center
+    /* Botões de navegação no topo */
+    .top-buttons{
+      display:flex;justify-content:space-between;margin:20px 0;gap:20px;
+      position:sticky;top:0;background:#fff;padding:10px 0;z-index:100;
+      border-bottom:2px solid #f0f0f0;
     }
     
-    .option-card:hover{border-color:#007bff;background:#e3f2fd;transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1)}
-    .option-card.selected{border-color:#28a745;background:#d4edda}
-    .option-icon{width:60px;height:60px;background:#007bff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5em;font-weight:bold;margin-bottom:15px}
+    .progress-bar{background:#f0f0f0;border-radius:10px;height:10px;margin:20px 0;overflow:hidden}
+    .progress-fill{background:linear-gradient(90deg,#4CAF50,#45a049);height:100%;transition:width .3s ease;border-radius:10px}
+    .step-info{color:#666;margin-bottom:15px;font-size:1.1em}
+    .step-content{margin:20px 0}
+    .step-title{font-size:2em;color:#333;margin-bottom:20px}
+    
+    /* Grid otimizado para iPad - 4 vendedoras em 2x2 */
+    .options-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:15px;
+      margin:20px 0;
+      max-width:600px;
+      margin-left:auto;
+      margin-right:auto;
+    }
+    
+    /* Cards das vendedoras otimizados para iPad */
+    .option-card{
+      background:#f8f9fa;border:3px solid #e9ecef;border-radius:15px;padding:20px;cursor:pointer;
+      transition:all .3s ease;height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center
+    }
+    
+    .option-card:hover{border-color:#FF69B4;background:#FFF0F8;transform:translateY(-3px);box-shadow:0 8px 16px rgba(255,105,180,.2)}
+    .option-card.selected{border-color:#FF1493;background:#FFE4E1}
+    .option-icon{width:60px;height:60px;background:#FF69B4;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5em;font-weight:bold;margin-bottom:15px}
     .option-name{font-size:1.3em;font-weight:bold;color:#333;margin-bottom:5px}
     .option-desc{color:#666;font-size:.9em}
-    .rating-section{margin:30px 0;text-align:left}
+    .rating-section{margin:20px 0;text-align:left}
     .rating-label{font-size:1.2em;font-weight:bold;color:#333;margin-bottom:15px;display:block}
-    .stars{display:flex;gap:10px;margin-bottom:25px}
+    .stars{display:flex;gap:10px;margin-bottom:20px}
     .star{font-size:2.5em;color:#ddd;cursor:pointer;transition:all .2s ease;user-select:none}
     .star:hover,.star.active{color:#ffd700;transform:scale(1.1)}
-    .comment-section{margin:30px 0;text-align:left}
+    .comment-section{margin:20px 0;text-align:left}
     .comment-label{font-size:1.2em;font-weight:bold;color:#333;margin-bottom:10px;display:block}
     .comment-input{
       width:100%;padding:15px;border:2px solid #e9ecef;border-radius:10px;font-size:1.1em;resize:vertical;min-height:100px;font-family:inherit
     }
-    .comment-input:focus{outline:none;border-color:#007bff}
-    .buttons{display:flex;justify-content:space-between;margin-top:40px;gap:20px}
+    .comment-input:focus{outline:none;border-color:#FF69B4}
+    .buttons{display:flex;justify-content:space-between;margin-top:30px;gap:20px}
     .btn{padding:15px 30px;border:none;border-radius:10px;font-size:1.2em;font-weight:bold;cursor:pointer;transition:all .3s ease;min-width:120px}
     .btn-secondary{background:#6c757d;color:#fff}
     .btn-secondary:hover{background:#5a6268}
-    .btn-primary{background:linear-gradient(135deg,#007bff,#0056b3);color:#fff}
-    .btn-primary:hover{background:linear-gradient(135deg,#0056b3,#004085);transform:translateY(-2px)}
-    .btn-success{background:linear-gradient(135deg,#28a745,#1e7e34);color:#fff}
-    .btn-success:hover{background:linear-gradient(135deg,#1e7e34,#155724);transform:translateY(-2px)}
+    .btn-primary{background:linear-gradient(135deg,#FF69B4,#FF1493);color:#fff}
+    .btn-primary:hover{background:linear-gradient(135deg,#FF1493,#DC143C);transform:translateY(-2px)}
+    .btn-success{background:linear-gradient(135deg,#32CD32,#228B22);color:#fff}
+    .btn-success:hover{background:linear-gradient(135deg,#228B22,#006400);transform:translateY(-2px)}
     .success-screen{text-align:center;padding:40px}
-    .success-icon{font-size:5em;color:#28a745;margin-bottom:20px}
+    .success-icon{font-size:5em;color:#32CD32;margin-bottom:20px}
     .success-title{font-size:2.5em;color:#333;margin-bottom:15px}
     .success-message{font-size:1.2em;color:#666;margin-bottom:30px;line-height:1.6}
     .admin-btn{
@@ -66,13 +85,34 @@
     .hidden{display:none}
 
     /* Responsivo para iPad */
+    @media (max-width: 1024px) and (min-width: 768px){
+      .container{
+        padding:30px;
+        margin:10px;
+        max-height:95vh;
+      }
+      .header h1{font-size:2.2em}
+      .options-grid{
+        grid-template-columns:repeat(2,1fr);
+        gap:20px;
+        max-width:700px;
+      }
+      .option-card{
+        padding:25px;
+        height:220px;
+      }
+      .star{font-size:2.2em}
+      .step-title{font-size:1.8em}
+    }
+
+    /* Responsivo para telas menores */
     @media (max-width: 768px){
-      .container{padding:30px 20px;margin:10px}
-      .header h1{font-size:2em}
+      .container{padding:20px;margin:10px}
+      .header h1{font-size:1.8em}
       .options-grid{grid-template-columns:1fr;gap:15px}
-      .option-card{padding:25px;min-height:100px}
+      .option-card{padding:20px;height:150px}
       .star{font-size:2em}
-      .buttons{flex-direction:column}
+      .top-buttons{flex-direction:column}
       .btn{width:100%}
     }
   </style>
@@ -87,6 +127,12 @@
         <p>Sua opinião é muito importante para nós!</p>
       </div>
 
+      <!-- Botões movidos para o topo -->
+      <div class="top-buttons">
+        <button class="btn btn-secondary" id="prev-btn">Voltar</button>
+        <button class="btn btn-primary" id="next-btn">Próximo</button>
+      </div>
+
       <div class="progress-bar">
         <div class="progress-fill" id="progress-fill"></div>
       </div>
@@ -94,11 +140,6 @@
       <div class="step-info" id="step-info">Etapa 1 de 4</div>
 
       <div class="step-content" id="step-content"></div>
-
-      <div class="buttons">
-        <button class="btn btn-secondary" id="prev-btn">Voltar</button>
-        <button class="btn btn-primary" id="next-btn">Próximo</button>
-      </div>
     </div>
 
     <div id="success-screen" class="success-screen hidden">
@@ -155,12 +196,13 @@
       { id: 3, nome: 'Maju',     inicial: 'M' },
       { id: 4, nome: 'Micaelly', inicial: 'M' }
     ];
+    
+    // TikTok removido da lista
     const comoConheceu = [
       { id: 1, nome: 'Google',         descricao: 'Pesquisou no Google',       inicial: 'G' },
-      { id: 2, nome: 'Instagram',  descricao: 'Viu no Instagram.', inicial: 'R' },
-      { id: 3, nome: 'Indicação',      descricao: 'Amigos ou conhecidos',      inicial: 'I' },
-      { id: 4, nome: 'Passei na Porta',descricao: 'Viu a loja fisicamente',    inicial: 'P' },
-      { id: 5, nome: 'TikTok',         descricao: 'Vídeos no TikTok',          inicial: 'T' }
+      { id: 2, nome: 'Instagram',      descricao: 'Viu no Instagram',          inicial: 'I' },
+      { id: 3, nome: 'Indicação',      descricao: 'Amigos ou conhecidos',      inicial: 'R' },
+      { id: 4, nome: 'Passei na Porta',descricao: 'Viu a loja fisicamente',    inicial: 'P' }
     ];
 
     /* =========================
@@ -272,7 +314,7 @@
   vendedoras.forEach(v => {
     html += `
       <div class="option-card" onclick="__selectVendedora(${v.id})">
-        <img src="${v.nome}.png" alt="${v.nome}" style="width:180px;height:180px;border-radius:50%;object-fit:cover;margin-bottom:10px;border:2px solid #007bff;">
+        <img src="${v.nome}.png" alt="${v.nome}" style="width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:10px;border:3px solid #FF69B4;">
         <div class="option-name">${v.nome}</div>
       </div>
     `;
@@ -288,7 +330,7 @@
   comoConheceu.forEach(opt => {
     html += `
       <div class="option-card" onclick="__selectComoConheceu(${opt.id})">
-        <img src="${opt.nome}.png" alt="${opt.nome}" style="width:180px;height:180px;border-radius:15px;object-fit:cover;margin-bottom:10px;border:2px solid #007bff;">
+        <img src="${opt.nome}.png" alt="${opt.nome}" style="width:120px;height:120px;border-radius:15px;object-fit:cover;margin-bottom:10px;border:3px solid #FF69B4;">
         <div class="option-name">${opt.nome}</div>
         <div class="option-desc">${opt.descricao}</div>
       </div>
@@ -399,6 +441,20 @@
       resetEvaluation();
     }
 
+    function resetEvaluation() {
+      evaluationData = {
+        vendedora: null,
+        comoConheceu: null,
+        avaliacaoGeral: 1,
+        qualidadeServico: 1,
+        simpatiaEquipe: 1,
+        tempoResposta: 1,
+        avaliacaoLoja: 1,
+        comentarios: '',
+        observacoes: ''
+      };
+    }
+
     /* =========================
      * ADMIN / RELATÓRIOS
      * ========================= */
@@ -419,86 +475,36 @@
 
       const avgEl = document.getElementById('average-rating');
       if (evaluations.length > 0) {
-        const totalRating = evaluations.reduce((sum, ev) => {
-          return sum + (
-            (ev.avaliacao_geral    || 0) +
-            (ev.qualidade_servico  || 0) +
-            (ev.simpatia_equipe    || 0) +
-            (ev.tempo_resposta     || 0) +
-            (ev.avaliacao_loja     || 0)
-          ) / 5;
-        }, 0);
-        if (avgEl) avgEl.textContent = (totalRating / evaluations.length).toFixed(1);
+        const totalRating = evaluations.reduce((sum, ev) => sum + (ev.avaliacao_geral || 0), 0);
+        const average = (totalRating / evaluations.length).toFixed(1);
+        if (avgEl) avgEl.textContent = average;
       } else {
         if (avgEl) avgEl.textContent = '0';
       }
 
-      const listContainer = document.getElementById('evaluations-list');
-      if (!listContainer) return;
-
-      if (evaluations.length === 0) {
-        listContainer.innerHTML = '<p>Nenhuma avaliação encontrada.</p>';
-        return;
+      const listEl = document.getElementById('evaluations-list');
+      if (listEl) {
+        listEl.innerHTML = evaluations.map(ev => {
+          const vendedoraNome = vendedoras.find(v => v.id === ev.vendedora)?.nome || 'N/A';
+          const comoConheceuNome = comoConheceu.find(c => c.id === ev.como_conheceu)?.nome || 'N/A';
+          const timestamp = new Date(ev.timestamp).toLocaleString('pt-BR');
+          
+          return `
+            <div style="border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px;">
+              <p><strong>Data:</strong> ${timestamp}</p>
+              <p><strong>Vendedora:</strong> ${vendedoraNome}</p>
+              <p><strong>Como conheceu:</strong> ${comoConheceuNome}</p>
+              <p><strong>Avaliação Geral:</strong> ${ev.avaliacao_geral} estrelas</p>
+              <p><strong>Qualidade do Serviço:</strong> ${ev.qualidade_servico} estrelas</p>
+              <p><strong>Simpatia da Equipe:</strong> ${ev.simpatia_equipe} estrelas</p>
+              <p><strong>Tempo de Resposta:</strong> ${ev.tempo_resposta} estrelas</p>
+              <p><strong>Avaliação da Loja:</strong> ${ev.avaliacao_loja} estrelas</p>
+              ${ev.comentarios ? `<p><strong>Comentários:</strong> ${ev.comentarios}</p>` : ''}
+              ${ev.observacoes ? `<p><strong>Observações:</strong> ${ev.observacoes}</p>` : ''}
+            </div>
+          `;
+        }).join('');
       }
-
-      const nomeVendedora = (id) => {
-        if (!id && id !== 0) return 'Não informado';
-        const v = vendedoras.find(x => x.id === id);
-        return v ? v.nome : (id === 0 ? 'Não informado' : 'Não informado');
-      };
-      const nomeComoConheceu = (id) => {
-        if (!id) return 'Não informado';
-        const c = comoConheceu.find(x => x.id === id);
-        return c ? c.nome : 'Não informado';
-      };
-
-      let html = '<h4>Avaliações Recentes:</h4>';
-      evaluations.slice(0, 10).forEach(ev => {
-        const date = new Date(ev.timestamp).toLocaleString('pt-BR');
-        html += `
-          <div style="border:1px solid #ddd;padding:15px;margin:10px 0;border-radius:8px;">
-            <p><strong>Data:</strong> ${date}</p>
-            <p><strong>Vendedora:</strong> ${nomeVendedora(ev.vendedora)}</p>
-            <p><strong>Como conheceu:</strong> ${nomeComoConheceu(ev.como_conheceu)}</p>
-            <p><strong>Avaliações:</strong>
-              Geral: ${ev.avaliacao_geral || 0}★,
-              Qualidade: ${ev.qualidade_servico || 0}★,
-              Simpatia: ${ev.simpatia_equipe || 0}★,
-              Tempo: ${ev.tempo_resposta || 0}★,
-              Loja: ${ev.avaliacao_loja || 0}★
-            </p>
-            ${ev.comentarios ? `<p><strong>Comentários:</strong> ${sanitize(ev.comentarios)}</p>` : ''}
-            ${ev.observacoes ? `<p><strong>Observações:</strong> ${sanitize(ev.observacoes)}</p>` : ''}
-          </div>
-        `;
-      });
-
-      listContainer.innerHTML = html;
-    }
-
-    /* =========================
-     * SUPORTE / UTILIDADES
-     * ========================= */
-    function resetEvaluation() {
-      evaluationData = {
-        vendedora: null,
-        comoConheceu: null,
-        avaliacaoGeral: 0,
-        qualidadeServico: 0,
-        simpatiaEquipe: 0,
-        tempoResposta: 0,
-        avaliacaoLoja: 0,
-        comentarios: '',
-        observacoes: ''
-      };
-      showStep(1);
-    }
-
-    function sanitize(str) {
-      return String(str).replace(/[&<>"'`=\/]/g, s => ({
-        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;',
-        '`':'&#x60;','=':'&#x3D;','/':'&#x2F;'
-      }[s]));
     }
 
     /* =========================
