@@ -1,790 +1,542 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Avaliação - Loja</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sistema de Avaliação - Loja</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;
+    }
+    .container{
+      background:#fff;border-radius:20px;box-shadow:0 20px 40px rgba(0,0,0,.1);
+      padding:40px;max-width:800px;width:100%;text-align:center
+    }
+    .header{margin-bottom:30px}
+    .header h1{color:#333;font-size:2.5em;margin-bottom:10px}
+    .header p{color:#666;font-size:1.2em}
+    .progress-bar{background:#f0f0f0;border-radius:10px;height:10px;margin:30px 0;overflow:hidden}
+    .progress-fill{background:linear-gradient(90deg,#4CAF50,#45a049);height:100%;transition:width .3s ease;border-radius:10px}
+    .step-info{color:#666;margin-bottom:20px;font-size:1.1em}
+    .step-content{margin:40px 0}
+    .step-title{font-size:2em;color:#333;margin-bottom:30px}
+    .options-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin:30px 0}
+    .option-card{
+      background:#f8f9fa;border:3px solid #e9ecef;border-radius:15px;padding:30px;cursor:pointer;
+      transition:all .3s ease;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center
+    }
+    .option-card:hover{border-color:#007bff;background:#e3f2fd;transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1)}
+    .option-card.selected{border-color:#28a745;background:#d4edda}
+    .option-icon{width:60px;height:60px;background:#007bff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5em;font-weight:bold;margin-bottom:15px}
+    .option-name{font-size:1.3em;font-weight:bold;color:#333;margin-bottom:5px}
+    .option-desc{color:#666;font-size:.9em}
+    .rating-section{margin:30px 0;text-align:left}
+    .rating-label{font-size:1.2em;font-weight:bold;color:#333;margin-bottom:15px;display:block}
+    .stars{display:flex;gap:10px;margin-bottom:25px}
+    .star{font-size:2.5em;color:#ddd;cursor:pointer;transition:all .2s ease;user-select:none}
+    .star:hover,.star.active{color:#ffd700;transform:scale(1.1)}
+    .comment-section{margin:30px 0;text-align:left}
+    .comment-label{font-size:1.2em;font-weight:bold;color:#333;margin-bottom:10px;display:block}
+    .comment-input{
+      width:100%;padding:15px;border:2px solid #e9ecef;border-radius:10px;font-size:1.1em;resize:vertical;min-height:100px;font-family:inherit
+    }
+    .comment-input:focus{outline:none;border-color:#007bff}
+    .buttons{display:flex;justify-content:space-between;margin-top:40px;gap:20px}
+    .btn{padding:15px 30px;border:none;border-radius:10px;font-size:1.2em;font-weight:bold;cursor:pointer;transition:all .3s ease;min-width:120px}
+    .btn-secondary{background:#6c757d;color:#fff}
+    .btn-secondary:hover{background:#5a6268}
+    .btn-primary{background:linear-gradient(135deg,#007bff,#0056b3);color:#fff}
+    .btn-primary:hover{background:linear-gradient(135deg,#0056b3,#004085);transform:translateY(-2px)}
+    .btn-success{background:linear-gradient(135deg,#28a745,#1e7e34);color:#fff}
+    .btn-success:hover{background:linear-gradient(135deg,#1e7e34,#155724);transform:translateY(-2px)}
+    .success-screen{text-align:center;padding:40px}
+    .success-icon{font-size:5em;color:#28a745;margin-bottom:20px}
+    .success-title{font-size:2.5em;color:#333;margin-bottom:15px}
+    .success-message{font-size:1.2em;color:#666;margin-bottom:30px;line-height:1.6}
+    .admin-btn{
+      position:fixed;top:20px;right:20px;background:#17a2b8;color:#fff;border:none;padding:10px 20px;border-radius:8px;cursor:pointer;font-size:1em
+    }
+    .admin-btn:hover{background:#138496}
+    .hidden{display:none}
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 40px;
-            max-width: 800px;
-            width: 100%;
-            text-align: center;
-        }
-
-        .header {
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            color: #333;
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            color: #666;
-            font-size: 1.2em;
-        }
-
-        .progress-bar {
-            background: #f0f0f0;
-            border-radius: 10px;
-            height: 10px;
-            margin: 30px 0;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            background: linear-gradient(90deg, #4CAF50, #45a049);
-            height: 100%;
-            transition: width 0.3s ease;
-            border-radius: 10px;
-        }
-
-        .step-info {
-            color: #666;
-            margin-bottom: 20px;
-            font-size: 1.1em;
-        }
-
-        .step-content {
-            margin: 40px 0;
-        }
-
-        .step-title {
-            font-size: 2em;
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        .options-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .option-card {
-            background: #f8f9fa;
-            border: 3px solid #e9ecef;
-            border-radius: 15px;
-            padding: 30px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-height: 120px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .option-card:hover {
-            border-color: #007bff;
-            background: #e3f2fd;
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .option-card.selected {
-            border-color: #28a745;
-            background: #d4edda;
-        }
-
-        .option-icon {
-            width: 60px;
-            height: 60px;
-            background: #007bff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .option-name {
-            font-size: 1.3em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-
-        .option-desc {
-            color: #666;
-            font-size: 0.9em;
-        }
-
-        .rating-section {
-            margin: 30px 0;
-            text-align: left;
-        }
-
-        .rating-label {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .stars {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-
-        .star {
-            font-size: 2.5em;
-            color: #ddd;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            user-select: none;
-        }
-
-        .star:hover,
-        .star.active {
-            color: #ffd700;
-            transform: scale(1.1);
-        }
-
-        .comment-section {
-            margin: 30px 0;
-            text-align: left;
-        }
-
-        .comment-label {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
-            display: block;
-        }
-
-        .comment-input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            font-size: 1.1em;
-            resize: vertical;
-            min-height: 100px;
-            font-family: inherit;
-        }
-
-        .comment-input:focus {
-            outline: none;
-            border-color: #007bff;
-        }
-
-        .buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 40px;
-            gap: 20px;
-        }
-
-        .btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.2em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 120px;
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #5a6268;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #007bff, #0056b3);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #0056b3, #004085);
-            transform: translateY(-2px);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #28a745, #1e7e34);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background: linear-gradient(135deg, #1e7e34, #155724);
-            transform: translateY(-2px);
-        }
-
-        .success-screen {
-            text-align: center;
-            padding: 40px;
-        }
-
-        .success-icon {
-            font-size: 5em;
-            color: #28a745;
-            margin-bottom: 20px;
-        }
-
-        .success-title {
-            font-size: 2.5em;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .success-message {
-            font-size: 1.2em;
-            color: #666;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .admin-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #17a2b8;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1em;
-        }
-
-        .admin-btn:hover {
-            background: #138496;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* Responsivo para iPad */
-        @media (max-width: 768px) {
-            .container {
-                padding: 30px 20px;
-                margin: 10px;
-            }
-
-            .header h1 {
-                font-size: 2em;
-            }
-
-            .options-grid {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-
-            .option-card {
-                padding: 25px;
-                min-height: 100px;
-            }
-
-            .star {
-                font-size: 2em;
-            }
-
-            .buttons {
-                flex-direction: column;
-            }
-
-            .btn {
-                width: 100%;
-            }
-        }
-    </style>
+    /* Responsivo para iPad */
+    @media (max-width: 768px){
+      .container{padding:30px 20px;margin:10px}
+      .header h1{font-size:2em}
+      .options-grid{grid-template-columns:1fr;gap:15px}
+      .option-card{padding:25px;min-height:100px}
+      .star{font-size:2em}
+      .buttons{flex-direction:column}
+      .btn{width:100%}
+    }
+  </style>
 </head>
 <body>
-    <button class="admin-btn" onclick="toggleAdmin()">Admin</button>
+  <button class="admin-btn" onclick="toggleAdmin()">Admin</button>
 
-    <div class="container">
-        <!-- Tela Principal de Avaliação -->
-        <div id="evaluation-screen">
-            <div class="header">
-                <h1>Avaliação de Atendimento</h1>
-                <p>Sua opinião é muito importante para nós!</p>
-            </div>
+  <div class="container">
+    <!-- Tela Principal de Avaliação -->
+    <div id="evaluation-screen">
+      <div class="header">
+        <h1>Avaliação de Atendimento</h1>
+        <p>Sua opinião é muito importante para nós!</p>
+      </div>
 
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
 
-            <div class="step-info" id="step-info">Etapa 1 de 4</div>
+      <div class="step-info" id="step-info">Etapa 1 de 4</div>
 
-            <div class="step-content" id="step-content">
-                <!-- Conteúdo das etapas será inserido aqui -->
-            </div>
+      <div class="step-content" id="step-content"></div>
 
-            <div class="buttons">
-                <button class="btn btn-secondary" id="prev-btn" onclick="previousStep()">Voltar</button>
-                <button class="btn btn-primary" id="next-btn" onclick="nextStep()">Próximo</button>
-            </div>
-        </div>
-
-        <!-- Tela de Sucesso -->
-        <div id="success-screen" class="success-screen hidden">
-            <div class="success-icon">✅</div>
-            <h2 class="success-title">Avaliação Enviada!</h2>
-            <p class="success-message">
-                Obrigado pelo seu feedback! Sua opinião nos ajuda a melhorar nossos serviços continuamente.
-            </p>
-            <button class="btn btn-success" onclick="newEvaluation()">Nova Avaliação</button>
-        </div>
-
-        <!-- Painel Admin -->
-        <div id="admin-screen" class="hidden">
-            <div class="header">
-                <h1>Painel Administrativo</h1>
-                <p>Visualize os relatórios de avaliações</p>
-            </div>
-            
-            <div id="admin-content">
-                <h3>Relatórios de Avaliações</h3>
-                <div id="stats" style="margin: 20px 0;">
-                    <p><strong>Total de Avaliações:</strong> <span id="total-count">0</span></p>
-                    <p><strong>Média Geral:</strong> <span id="average-rating">0</span> estrelas</p>
-                </div>
-                
-                <div id="evaluations-list" style="text-align: left; max-height: 400px; overflow-y: auto;">
-                    <!-- Lista de avaliações será inserida aqui -->
-                </div>
-            </div>
-            
-            <button class="btn btn-secondary" onclick="toggleAdmin()" style="margin-top: 20px;">Voltar ao Formulário</button>
-        </div>
+      <div class="buttons">
+        <button class="btn btn-secondary" id="prev-btn">Voltar</button>
+        <button class="btn btn-primary" id="next-btn">Próximo</button>
+      </div>
     </div>
 
-    <script>
-     // script.js
-// Versão: Supabase + Front-end SPA
-// Requer: <script type="module" src="./script.js"></script> em index.html
-//         e supabase.js com: export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    <!-- Tela de Sucesso -->
+    <div id="success-screen" class="success-screen hidden">
+      <div class="success-icon">✅</div>
+      <h2 class="success-title">Avaliação Enviada!</h2>
+      <p class="success-message">
+        Obrigado pelo seu feedback! Sua opinião nos ajuda a melhorar nossos serviços continuamente.
+      </p>
+      <button class="btn btn-success" onclick="newEvaluation()">Nova Avaliação</button>
+    </div>
 
-import { supabase } from './supabase.js';
+    <!-- Painel Admin -->
+    <div id="admin-screen" class="hidden">
+      <div class="header">
+        <h1>Painel Administrativo</h1>
+        <p>Visualize os relatórios de avaliações</p>
+      </div>
 
-/* =========================
- *   DADOS ESTÁTICOS
- * ========================= */
-const vendedoras = [
-  { id: 1, nome: 'Jéssica', inicial: 'J' },
-  { id: 2, nome: 'Júlia',   inicial: 'J' },
-  { id: 3, nome: 'Maju',    inicial: 'M' },
-  { id: 4, nome: 'Micaelly',inicial: 'M' }
-];
+      <div id="admin-content">
+        <h3>Relatórios de Avaliações</h3>
+        <div id="stats" style="margin: 20px 0;">
+          <p><strong>Total de Avaliações:</strong> <span id="total-count">0</span></p>
+          <p><strong>Média Geral:</strong> <span id="average-rating">0</span> estrelas</p>
+        </div>
 
-const comoConheceu = [
-  { id: 1, nome: 'Google',        descricao: 'Pesquisou no Google',          inicial: 'G' },
-  { id: 2, nome: 'Redes Sociais', descricao: 'Instagram, Facebook, etc.',    inicial: 'R' },
-  { id: 3, nome: 'Indicação',     descricao: 'Amigos ou conhecidos',         inicial: 'I' },
-  { id: 4, nome: 'Passei na Porta',descricao:'Viu a loja fisicamente',       inicial: 'P' },
-  { id: 5, nome: 'TikTok',        descricao: 'Vídeos no TikTok',             inicial: 'T' }
-];
+        <div id="evaluations-list" style="text-align: left; max-height: 400px; overflow-y: auto;">
+          <!-- Lista de avaliações -->
+        </div>
+      </div>
 
-/* =========================
- *   ESTADO DA AVALIAÇÃO
- * ========================= */
-let currentStep = 1;
-let evaluationData = {
-  vendedora: null,
-  comoConheceu: null,
-  avaliacaoGeral: 0,
-  qualidadeServico: 0,
-  simpatiaEquipe: 0,
-  tempoResposta: 0,
-  avaliacaoLoja: 0,
-  comentarios: '',
-  observacoes: ''
-};
+      <button class="btn btn-secondary" onclick="toggleAdmin()" style="margin-top: 20px;">Voltar ao Formulário</button>
+    </div>
+  </div>
 
-/* =========================
- *   INICIALIZAÇÃO
- * ========================= */
-document.addEventListener('DOMContentLoaded', () => {
-  showStep(1);
-  // O botão "Admin" alterna telas; ao entrar no admin, chamamos loadAdminData()
-  // Os elementos/ids abaixo já existem no seu HTML original (container, step-content, etc.)  [oai_citation:0‡index (5).html](file-service://file-SCYQXFsQmdCatGR1JNbUQj)
-  loadAdminData(); // opcional: carrega já ao iniciar (não faz nada visível até abrir o admin)
-});
+  <!-- SUPABASE CLIENT: configure sua URL e ANON KEY -->
+  <script type="module">
+    import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
-/* =========================
- *   NAVEGAÇÃO DE ETAPAS
- * ========================= */
-function showStep(step) {
-  currentStep = step;
-  updateProgress();
-  updateStepInfo();
-  updateButtons();
+    // TODO: substitua pelos valores do seu projeto
+    const SUPABASE_URL = 'https://lvgwkktrzizobazaxdty.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imx2Z3dra3Ryeml6b2JhemF4ZHR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTg3MzIzMjYsImV4cCI6MjA3NDMwODMyNn0.EeAG4AAT0Bix6LADh1bl50vFPWS7qzqIL5g_R7G5M7o';
 
-  const content = document.getElementById('step-content');
+    // Expondo supabase globalmente para o outro módulo
+    window.supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
 
-  switch (step) {
-    case 1:
-      content.innerHTML = createVendedorasStep();
-      break;
-    case 2:
-      content.innerHTML = createComoConheceuStep();
-      break;
-    case 3:
-      content.innerHTML = createRatingsStep();
-      break;
-    case 4:
-      content.innerHTML = createCommentsStep();
-      break;
-  }
-}
+  <!-- APP: lógica de UI + integrações -->
+  <script type="module">
+    // Usa o supabase global criado acima
+    const supabase = window.supabase;
 
-function updateProgress() {
-  const progress = (currentStep / 4) * 100;
-  const bar = document.getElementById('progress-fill'); // existe no HTML original  [oai_citation:1‡index (5).html](file-service://file-SCYQXFsQmdCatGR1JNbUQj)
-  if (bar) bar.style.width = progress + '%';
-}
+    /* =========================
+     *   DADOS ESTÁTICOS
+     * ========================= */
+    const vendedoras = [
+      { id: 1, nome: 'Jéssica',  inicial: 'J' },
+      { id: 2, nome: 'Júlia',    inicial: 'J' },
+      { id: 3, nome: 'Maju',     inicial: 'M' },
+      { id: 4, nome: 'Micaelly', inicial: 'M' }
+    ];
+    const comoConheceu = [
+      { id: 1, nome: 'Google',         descricao: 'Pesquisou no Google',       inicial: 'G' },
+      { id: 2, nome: 'Redes Sociais',  descricao: 'Instagram, Facebook, etc.', inicial: 'R' },
+      { id: 3, nome: 'Indicação',      descricao: 'Amigos ou conhecidos',      inicial: 'I' },
+      { id: 4, nome: 'Passei na Porta',descricao: 'Viu a loja fisicamente',    inicial: 'P' },
+      { id: 5, nome: 'TikTok',         descricao: 'Vídeos no TikTok',          inicial: 'T' }
+    ];
 
-function updateStepInfo() {
-  const stepInfo = document.getElementById('step-info'); // existe no HTML original  [oai_citation:2‡index (5).html](file-service://file-SCYQXFsQmdCatGR1JNbUQj)
-  if (stepInfo) stepInfo.textContent = `Etapa ${currentStep} de 4`;
-}
+    /* =========================
+     *   ESTADO DA AVALIAÇÃO
+     * ========================= */
+    let currentStep = 1;
+    let evaluationData = {
+      vendedora: null,
+      comoConheceu: null,
+      avaliacaoGeral: 0,
+      qualidadeServico: 0,
+      simpatiaEquipe: 0,
+      tempoResposta: 0,
+      avaliacaoLoja: 0,
+      comentarios: '',
+      observacoes: ''
+    };
 
-function updateButtons() {
-  const prevBtn = document.getElementById('prev-btn'); // existe no HTML original  [oai_citation:3‡index (5).html](file-service://file-SCYQXFsQmdCatGR1JNbUQj)
-  const nextBtn = document.getElementById('next-btn'); // existe no HTML original  [oai_citation:4‡index (5).html](file-service://file-SCYQXFsQmdCatGR1JNbUQj)
+    /* =========================
+     *   INICIALIZAÇÃO
+     * ========================= */
+    document.addEventListener('DOMContentLoaded', () => {
+      showStep(1);
+      loadAdminData(); // opcional: já carrega (útil ao abrir admin)
+    });
 
-  if (prevBtn) prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
+    /* =========================
+     *   NAVEGAÇÃO DE ETAPAS
+     * ========================= */
+    function showStep(step) {
+      currentStep = step;
+      updateProgress();
+      updateStepInfo();
+      updateButtons();
 
-  if (nextBtn) {
-    if (currentStep === 4) {
-      nextBtn.textContent = 'Enviar Avaliação';
-      nextBtn.className = 'btn btn-success';
-    } else {
-      nextBtn.textContent = 'Próximo';
-      nextBtn.className = 'btn btn-primary';
+      const content = document.getElementById('step-content');
+
+      switch (step) {
+        case 1:
+          content.innerHTML = createVendedorasStep();
+          break;
+        case 2:
+          content.innerHTML = createComoConheceuStep();
+          break;
+        case 3:
+          content.innerHTML = createRatingsStep();
+          break;
+        case 4:
+          content.innerHTML = createCommentsStep();
+          break;
+      }
     }
-    nextBtn.onclick = nextStep;
-  }
 
-  if (prevBtn) prevBtn.onclick = previousStep;
-}
+    function updateProgress() {
+      const progress = (currentStep / 4) * 100;
+      const bar = document.getElementById('progress-fill');
+      if (bar) bar.style.width = progress + '%';
+    }
 
-function nextStep() {
-  if (currentStep === 4) {
-    // Coleta comentários/observações dos inputs (se existirem na tela atual)
-    const comentarios = document.getElementById('comentarios');
-    const observacoes = document.getElementById('observacoes');
-    if (comentarios) evaluationData.comentarios = comentarios.value.trim();
-    if (observacoes) evaluationData.observacoes = observacoes.value.trim();
+    function updateStepInfo() {
+      const stepInfo = document.getElementById('step-info');
+      if (stepInfo) stepInfo.textContent = `Etapa ${currentStep} de 4`;
+    }
 
-    submitEvaluation(); // envia ao Supabase
-  } else if (currentStep < 4) {
-    showStep(currentStep + 1);
-  }
-}
+    function updateButtons() {
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
 
-function previousStep() {
-  if (currentStep > 1) showStep(currentStep - 1);
-}
+      if (prevBtn) {
+        prevBtn.style.display = currentStep === 1 ? 'none' : 'block';
+        prevBtn.onclick = previousStep;
+      }
 
-/* =========================
- *   TELAS/ETAPAS (HTML)
- * ========================= */
-function createVendedorasStep() {
-  let html = '<h2 class="step-title">Quem te atendeu?</h2>';
-  html += '<div class="options-grid">';
-  vendedoras.forEach(v => {
-    html += `
-      <div class="option-card" onclick="window.__selectVendedora(${v.id})">
-        <div class="option-icon">${v.inicial}</div>
-        <div class="option-name">${v.nome}</div>
-      </div>
-    `;
-  });
-  html += '</div>';
-  html += '<button class="btn btn-secondary" onclick="window.__selectVendedora(0)" style="margin-top: 20px;">Não me lembro / Outro</button>';
-  return html;
-}
+      if (nextBtn) {
+        if (currentStep === 4) {
+          nextBtn.textContent = 'Enviar Avaliação';
+          nextBtn.className = 'btn btn-success';
+        } else {
+          nextBtn.textContent = 'Próximo';
+          nextBtn.className = 'btn btn-primary';
+        }
+        nextBtn.onclick = nextStep;
+      }
+    }
 
-function createComoConheceuStep() {
-  let html = '<h2 class="step-title">Como nos conheceu?</h2>';
-  html += '<div class="options-grid">';
-  comoConheceu.forEach(opt => {
-    html += `
-      <div class="option-card" onclick="window.__selectComoConheceu(${opt.id})">
-        <div class="option-icon">${opt.inicial}</div>
-        <div class="option-name">${opt.nome}</div>
-        <div class="option-desc">${opt.descricao}</div>
-      </div>
-    `;
-  });
-  html += '</div>';
-  return html;
-}
+    function nextStep() {
+      if (currentStep === 4) {
+        const comentarios = document.getElementById('comentarios');
+        const observacoes = document.getElementById('observacoes');
+        if (comentarios) evaluationData.comentarios = comentarios.value.trim();
+        if (observacoes) evaluationData.observacoes = observacoes.value.trim();
 
-function createRatingsStep() {
-  let html = '<h2 class="step-title">Avalie nossos serviços</h2>';
+        submitEvaluation();
+      } else if (currentStep < 4) {
+        showStep(currentStep + 1);
+      }
+    }
 
-  const ratings = [
-    { key: 'avaliacaoGeral',    label: 'Avaliação Geral do Atendimento' },
-    { key: 'qualidadeServico',  label: 'Qualidade do Serviço' },
-    { key: 'simpatiaEquipe',    label: 'Simpatia da Equipe' },
-    { key: 'tempoResposta',     label: 'Tempo de Resposta' },
-    { key: 'avaliacaoLoja',     label: 'Avaliação Geral da Loja' }
-  ];
+    function previousStep() {
+      if (currentStep > 1) showStep(currentStep - 1);
+    }
 
-  ratings.forEach(r => {
-    html += `
-      <div class="rating-section">
-        <label class="rating-label">${r.label}</label>
-        <div class="stars" data-rating="${r.key}">
-          ${[1,2,3,4,5].map(i => `<span class="star" data-value="${i}" onclick="window.__setRating('${r.key}', ${i})">★</span>`).join('')}
+    /* =========================
+     *   TELAS/ETAPAS (HTML)
+     * ========================= */
+    function createVendedorasStep() {
+      let html = '<h2 class="step-title">Quem te atendeu?</h2>';
+      html += '<div class="options-grid">';
+      vendedoras.forEach(v => {
+        html += `
+          <div class="option-card" onclick="__selectVendedora(${v.id})">
+            <div class="option-icon">${v.inicial}</div>
+            <div class="option-name">${v.nome}</div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      html += '<button class="btn btn-secondary" onclick="__selectVendedora(0)" style="margin-top: 20px;">Não me lembro / Outro</button>';
+      return html;
+    }
+
+    function createComoConheceuStep() {
+      let html = '<h2 class="step-title">Como nos conheceu?</h2>';
+      html += '<div class="options-grid">';
+      comoConheceu.forEach(opt => {
+        html += `
+          <div class="option-card" onclick="__selectComoConheceu(${opt.id})">
+            <div class="option-icon">${opt.inicial}</div>
+            <div class="option-name">${opt.nome}</div>
+            <div class="option-desc">${opt.descricao}</div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      return html;
+    }
+
+    function createRatingsStep() {
+      let html = '<h2 class="step-title">Avalie nossos serviços</h2>';
+
+      const ratings = [
+        { key: 'avaliacaoGeral',    label: 'Avaliação Geral do Atendimento' },
+        { key: 'qualidadeServico',  label: 'Qualidade do Serviço' },
+        { key: 'simpatiaEquipe',    label: 'Simpatia da Equipe' },
+        { key: 'tempoResposta',     label: 'Tempo de Resposta' },
+        { key: 'avaliacaoLoja',     label: 'Avaliação Geral da Loja' }
+      ];
+
+      ratings.forEach(r => {
+        html += `
+          <div class="rating-section">
+            <label class="rating-label">${r.label}</label>
+            <div class="stars" data-rating="${r.key}">
+              ${[1,2,3,4,5].map(i => `<span class="star" data-value="${i}" onclick="__setRating('${r.key}', ${i})">★</span>`).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      return html;
+    }
+
+    function createCommentsStep() {
+      return `
+        <h2 class="step-title">Observações Adicionais</h2>
+        <div class="comment-section">
+          <label class="comment-label">Comentários sobre o atendimento</label>
+          <textarea class="comment-input" id="comentarios" placeholder="Conte-nos sobre sua experiência..."></textarea>
         </div>
-      </div>
-    `;
-  });
+        <div class="comment-section">
+          <label class="comment-label">Outras observações</label>
+          <textarea class="comment-input" id="observacoes" placeholder="Algo mais que gostaria de compartilhar?"></textarea>
+        </div>
+      `;
+    }
 
-  return html;
-}
+    /* =========================
+     *   HANDLERS GLOBALIZADOS
+     * ========================= */
+    window.__selectVendedora = function(id) {
+      evaluationData.vendedora = id;
+      setTimeout(() => nextStep(), 250);
+    };
 
-function createCommentsStep() {
-  return `
-    <h2 class="step-title">Observações Adicionais</h2>
-    <div class="comment-section">
-      <label class="comment-label">Comentários sobre o atendimento</label>
-      <textarea class="comment-input" id="comentarios" placeholder="Conte-nos sobre sua experiência..."></textarea>
-    </div>
-    <div class="comment-section">
-      <label class="comment-label">Outras observações</label>
-      <textarea class="comment-input" id="observacoes" placeholder="Algo mais que gostaria de compartilhar?"></textarea>
-    </div>
-  `;
-}
+    window.__selectComoConheceu = function(id) {
+      evaluationData.comoConheceu = id;
+      setTimeout(() => nextStep(), 250);
+    };
 
-/* =========================
- *   HANDLERS (globalizados)
- * ========================= */
-// Tornamos acessível no window porque os cards usam onclick inline gerado por template string.
-window.__selectVendedora = function(id) {
-  evaluationData.vendedora = id;
-  setTimeout(() => nextStep(), 250);
-};
+    window.__setRating = function(category, value) {
+      evaluationData[category] = value;
+      const container = document.querySelector(`[data-rating="${category}"]`);
+      if (!container) return;
+      const stars = container.querySelectorAll('.star');
+      stars.forEach((star, index) => {
+        if (index < value) star.classList.add('active');
+        else star.classList.remove('active');
+      });
+    };
 
-window.__selectComoConheceu = function(id) {
-  evaluationData.comoConheceu = id;
-  setTimeout(() => nextStep(), 250);
-};
+    /* =========================
+     *   SUBMISSÃO (SUPABASE)
+     * ========================= */
+    async function submitEvaluation() {
+      if (!evaluationData.avaliacaoGeral) {
+        alert('Por favor, informe a Avaliação Geral (★).');
+        return;
+      }
 
-window.__setRating = function(category, value) {
-  evaluationData[category] = value;
+      const payload = {
+        vendedora:          evaluationData.vendedora,
+        como_conheceu:      evaluationData.comoConheceu,
+        avaliacao_geral:    evaluationData.avaliacaoGeral,
+        qualidade_servico:  evaluationData.qualidadeServico,
+        simpatia_equipe:    evaluationData.simpatiaEquipe,
+        tempo_resposta:     evaluationData.tempoResposta,
+        avaliacao_loja:     evaluationData.avaliacaoLoja,
+        comentarios:        evaluationData.comentarios,
+        observacoes:        evaluationData.observacoes,
+        timestamp:          new Date().toISOString()
+      };
 
-  // Atualiza visual das estrelas
-  const container = document.querySelector(`[data-rating="${category}"]`);
-  if (!container) return;
-  const stars = container.querySelectorAll('.star');
-  stars.forEach((star, index) => {
-    if (index < value) star.classList.add('active');
-    else star.classList.remove('active');
-  });
-};
+      const { error } = await supabase.from('avaliacoes').insert([payload]);
+      if (error) {
+        console.error(error);
+        alert('Erro ao salvar avaliação: ' + error.message);
+        return;
+      }
 
-/* =========================
- *   SUBMISSÃO (SUPABASE)
- * ========================= */
-async function submitEvaluation() {
-  // Validação simples (ex.: avaliar pelo menos "Avaliação Geral")
-  if (!evaluationData.avaliacaoGeral) {
-    alert('Por favor, informe a Avaliação Geral (★).');
-    return;
-  }
+      // Sucesso
+      const evalScreen    = document.getElementById('evaluation-screen');
+      const successScreen = document.getElementById('success-screen');
+      if (evalScreen) evalScreen.classList.add('hidden');
+      if (successScreen) successScreen.classList.remove('hidden');
 
-  const payload = {
-    vendedora:          evaluationData.vendedora,
-    como_conheceu:      evaluationData.comoConheceu,
-    avaliacao_geral:    evaluationData.avaliacaoGeral,
-    qualidade_servico:  evaluationData.qualidadeServico,
-    simpatia_equipe:    evaluationData.simpatiaEquipe,
-    tempo_resposta:     evaluationData.tempoResposta,
-    avaliacao_loja:     evaluationData.avaliacaoLoja,
-    comentarios:        evaluationData.comentarios,
-    observacoes:        evaluationData.observacoes,
-    timestamp:          new Date().toISOString()
-  };
+      resetEvaluation();
+    }
 
-  const { error } = await supabase.from('avaliacoes').insert([payload]);
+    /* =========================
+     *   ADMIN / RELATÓRIOS
+     * ========================= */
+    async function loadAdminData() {
+      const { data: evaluations, error } = await supabase
+        .from('avaliacoes')
+        .select('*')
+        .order('timestamp', { ascending: false });
 
-  if (error) {
-    console.error(error);
-    alert('Erro ao salvar avaliação: ' + error.message);
-    return;
-  }
+      if (error) {
+        console.error(error);
+        alert('Erro ao carregar dados: ' + error.message);
+        return;
+      }
 
-  // Sucesso: mostra tela de sucesso (ids já existem no HTML original)  [oai_citation:5‡index (5).html](file-service://file-SCYQXFsQmdCatGR1JNbUQj)
-  const evalScreen    = document.getElementById('evaluation-screen');
-  const successScreen = document.getElementById('success-screen');
-  if (evalScreen) evalScreen.classList.add('hidden');
-  if (successScreen) successScreen.classList.remove('hidden');
+      const totalCountEl = document.getElementById('total-count');
+      if (totalCountEl) totalCountEl.textContent = evaluations.length;
 
-  // Reseta estado para próxima avaliação
-  resetEvaluation();
-}
+      const avgEl = document.getElementById('average-rating');
+      if (evaluations.length > 0) {
+        const totalRating = evaluations.reduce((sum, ev) => {
+          return sum + (
+            (ev.avaliacao_geral    || 0) +
+            (ev.qualidade_servico  || 0) +
+            (ev.simpatia_equipe    || 0) +
+            (ev.tempo_resposta     || 0) +
+            (ev.avaliacao_loja     || 0)
+          ) / 5;
+        }, 0);
+        if (avgEl) avgEl.textContent = (totalRating / evaluations.length).toFixed(1);
+      } else {
+        if (avgEl) avgEl.textContent = '0';
+      }
 
-/* =========================
- *   ADMIN / RELATÓRIOS
- * ========================= */
-export async function loadAdminData() {
-  const { data: evaluations, error } = await supabase
-    .from('avaliacoes')
-    .select('*')
-    .order('timestamp', { ascending: false });
+      const listContainer = document.getElementById('evaluations-list');
+      if (!listContainer) return;
 
-  if (error) {
-    console.error(error);
-    alert('Erro ao carregar dados: ' + error.message);
-    return;
-  }
+      if (evaluations.length === 0) {
+        listContainer.innerHTML = '<p>Nenhuma avaliação encontrada.</p>';
+        return;
+      }
 
-  // KPIs
-  const totalCountEl = document.getElementById('total-count'); // existe no HTML original  [oai_citation:6‡index (5).html](file-service://file-SCYQXFsQmdCatGR1JNbUQj)
-  if (totalCountEl) totalCountEl.textContent = evaluations.length;
+      const nomeVendedora = (id) => {
+        if (!id && id !== 0) return 'Não informado';
+        const v = vendedoras.find(x => x.id === id);
+        return v ? v.nome : (id === 0 ? 'Não informado' : 'Não informado');
+      };
+      const nomeComoConheceu = (id) => {
+        if (!id) return 'Não informado';
+        const c = comoConheceu.find(x => x.id === id);
+        return c ? c.nome : 'Não informado';
+      };
 
-  const avgEl = document.getElementById('average-rating'); // existe no HTML original  [oai_citation:7‡index (5).html](file-service://file-SCYQXFsQmdCatGR1JNbUQj)
-  if (evaluations.length > 0) {
-    const totalRating = evaluations.reduce((sum, ev) => {
-      return sum + (
-        (ev.avaliacao_geral     || 0) +
-        (ev.qualidade_servico   || 0) +
-        (ev.simpatia_equipe     || 0) +
-        (ev.tempo_resposta      || 0) +
-        (ev.avaliacao_loja      || 0)
-      ) / 5;
-    }, 0);
-    if (avgEl) avgEl.textContent = (totalRating / evaluations.length).toFixed(1);
-  } else {
-    if (avgEl) avgEl.textContent = '0';
-  }
+      let html = '<h4>Avaliações Recentes:</h4>';
+      evaluations.slice(0, 10).forEach(ev => {
+        const date = new Date(ev.timestamp).toLocaleString('pt-BR');
+        html += `
+          <div style="border:1px solid #ddd;padding:15px;margin:10px 0;border-radius:8px;">
+            <p><strong>Data:</strong> ${date}</p>
+            <p><strong>Vendedora:</strong> ${nomeVendedora(ev.vendedora)}</p>
+            <p><strong>Como conheceu:</strong> ${nomeComoConheceu(ev.como_conheceu)}</p>
+            <p><strong>Avaliações:</strong>
+              Geral: ${ev.avaliacao_geral || 0}★,
+              Qualidade: ${ev.qualidade_servico || 0}★,
+              Simpatia: ${ev.simpatia_equipe || 0}★,
+              Tempo: ${ev.tempo_resposta || 0}★,
+              Loja: ${ev.avaliacao_loja || 0}★
+            </p>
+            ${ev.comentarios ? `<p><strong>Comentários:</strong> ${sanitize(ev.comentarios)}</p>` : ''}
+            ${ev.observacoes ? `<p><strong>Observações:</strong> ${sanitize(ev.observacoes)}</p>` : ''}
+          </div>
+        `;
+      });
 
-  // Lista
-  const listContainer = document.getElementById('evaluations-list'); // existe no HTML original  [oai_citation:8‡index (5).html](file-service://file-SCYQXFsQmdCatGR1JNbUQj)
-  if (!listContainer) return;
+      listContainer.innerHTML = html;
+    }
 
-  if (evaluations.length === 0) {
-    listContainer.innerHTML = '<p>Nenhuma avaliação encontrada.</p>';
-    return;
-  }
+    /* =========================
+     *   SUPORTE / UTILIDADES
+     * ========================= */
+    function resetEvaluation() {
+      evaluationData = {
+        vendedora: null,
+        comoConheceu: null,
+        avaliacaoGeral: 0,
+        qualidadeServico: 0,
+        simpatiaEquipe: 0,
+        tempoResposta: 0,
+        avaliacaoLoja: 0,
+        comentarios: '',
+        observacoes: ''
+      };
+      showStep(1);
+    }
 
-  const nomeVendedora = (id) => {
-    if (!id) return 'Não informado';
-    const v = vendedoras.find(x => x.id === id);
-    return v ? v.nome : 'Não informado';
-  };
+    function sanitize(str) {
+      return String(str).replace(/[&<>"'`=\/]/g, s => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;',
+        '`':'&#x60;','=':'&#x3D;','/':'&#x2F;'
+      }[s]));
+    }
 
-  const nomeComoConheceu = (id) => {
-    if (!id) return 'Não informado';
-    const c = comoConheceu.find(x => x.id === id);
-    return c ? c.nome : 'Não informado';
-  };
+    /* =========================
+     *   ADMIN TOGGLE
+     * ========================= */
+    function toggleAdmin() {
+      const evalScreen    = document.getElementById('evaluation-screen');
+      const successScreen = document.getElementById('success-screen');
+      const adminScreen   = document.getElementById('admin-screen');
 
-  let html = '<h4>Avaliações Recentes:</h4>';
-  evaluations.slice(0, 10).forEach(ev => {
-    const date = new Date(ev.timestamp).toLocaleString('pt-BR');
-    html += `
-      <div style="border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px;">
-        <p><strong>Data:</strong> ${date}</p>
-        <p><strong>Vendedora:</strong> ${nomeVendedora(ev.vendedora)}</p>
-        <p><strong>Como conheceu:</strong> ${nomeComoConheceu(ev.como_conheceu)}</p>
-        <p><strong>Avaliações:</strong>
-          Geral: ${ev.avaliacao_geral || 0}★,
-          Qualidade: ${ev.qualidade_servico || 0}★,
-          Simpatia: ${ev.simpatia_equipe || 0}★,
-          Tempo: ${ev.tempo_resposta || 0}★,
-          Loja: ${ev.avaliacao_loja || 0}★
-        </p>
-        ${ev.comentarios ? `<p><strong>Comentários:</strong> ${sanitize(ev.comentarios)}</p>` : ''}
-        ${ev.observacoes ? `<p><strong>Observações:</strong> ${sanitize(ev.observacoes)}</p>` : ''}
-      </div>
-    `;
-  });
+      if (!adminScreen || !evalScreen || !successScreen) return;
 
-  // Atualiza a DIV da lista (este elemento está no seu HTML original)  [oai_citation:9‡index (5).html](file-service://file-SCYQXFsQmdCatGR1JNbUQj)
-  listContainer.innerHTML = html;
-}
+      if (adminScreen.classList.contains('hidden')) {
+        evalScreen.classList.add('hidden');
+        successScreen.classList.add('hidden');
+        adminScreen.classList.remove('hidden');
+        loadAdminData();
+      } else {
+        adminScreen.classList.add('hidden');
+        evalScreen.classList.remove('hidden');
+      }
+    }
 
-/* =========================
- *   SUPORTE / UTILIDADES
- * ========================= */
-function resetEvaluation() {
-  evaluationData = {
-    vendedora: null,
-    comoConheceu: null,
-    avaliacaoGeral: 0,
-    qualidadeServico: 0,
-    simpatiaEquipe: 0,
-    tempoResposta: 0,
-    avaliacaoLoja: 0,
-    comentarios: '',
-    observacoes: ''
-  };
-  showStep(1);
-}
+    function newEvaluation() {
+      const successScreen = document.getElementById('success-screen');
+      const evalScreen    = document.getElementById('evaluation-screen');
+      if (successScreen) successScreen.classList.add('hidden');
+      if (evalScreen) evalScreen.classList.remove('hidden');
+      showStep(1);
+    }
 
-function sanitize(str) {
-  // proteção simples contra HTML injection ao exibir comentários
-  return String(str).replace(/[&<>"'`=\/]/g, s => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
-    '`': '&#x60;', '=': '&#x3D;', '/': '&#x2F;'
-  }[s]));
-}
+    // expõe funções usadas em atributos onclick do HTML
+    window.toggleAdmin = toggleAdmin;
+    window.newEvaluation = newEvaluation;
 
-/* =========================
- *   ADMIN TOGGLE (opcional)
- * ========================= */
-// No seu HTML existe um botão "Admin" que chama toggleAdmin() para alternar telas  [oai_citation:10‡index (5).html](file-service://file-SCYQXFsQmdCatGR1JNbUQj)
-export function toggleAdmin() {
-  const evalScreen    = document.getElementById('evaluation-screen');
-  const successScreen = document.getElementById('success-screen');
-  const adminScreen   = document.getElementById('admin-screen'); // existe no HTML original  [oai_citation:11‡index (5).html](file-service://file-SCYQXFsQmdCatGR1JNbUQj)
-
-  if (!adminScreen || !evalScreen || !successScreen) return;
-
-  if (adminScreen.classList.contains('hidden')) {
-    evalScreen.classList.add('hidden');
-    successScreen.classList.add('hidden');
-    adminScreen.classList.remove('hidden');
-    loadAdminData(); // atualiza relatórios sempre que abrir
-  } else {
-    adminScreen.classList.add('hidden');
-    evalScreen.classList.remove('hidden');
-  }
-}
-
-// Expõe toggleAdmin no window porque o HTML usa onclick no botão
-window.toggleAdmin = toggleAdmin;    </script>
+  </script>
 </body>
 </html>
