@@ -28,7 +28,7 @@
     /* ALTERAÇÕES NO TAMANHO DO QUADRO AQUI */
     .option-card{
       background:#f8f9fa;border:3px solid #e9ecef;border-radius:15px;padding:30px;cursor:pointer;
-      transition:all .3s ease;min-height:220px;aspect-ratio: 1 / 1;display:flex;flex-direction:column;align-items:center;justify-content:center
+      transition:all .3s ease;min-height:200px;aspect-ratio: 1 / 1;display:flex;flex-direction:column;align-items:center;justify-content:center
     }
     
     .option-card:hover{border-color:#007bff;background:#e3f2fd;transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1)}
@@ -272,7 +272,7 @@
   vendedoras.forEach(v => {
     html += `
       <div class="option-card" onclick="__selectVendedora(${v.id})">
-        <img src="${v.nome}.png" alt="${v.nome}" style="width:130px;height:130px;border-radius:50%;object-fit:cover;margin-bottom:10px;border:2px solid #007bff;">
+        <img src="${v.nome}.png" alt="${v.nome}" style="width:180px;height:180px;border-radius:50%;object-fit:cover;margin-bottom:10px;border:2px solid #007bff;">
         <div class="option-name">${v.nome}</div>
       </div>
     `;
