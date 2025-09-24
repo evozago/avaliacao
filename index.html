@@ -269,21 +269,21 @@
     /* =========================
      *   TELAS/ETAPAS (HTML)
      * ========================= */
-    function createVendedorasStep() {
-      let html = '<h2 class="step-title">Quem te atendeu?</h2>';
-      html += '<div class="options-grid">';
-      vendedoras.forEach(v => {
-        html += `
-          <div class="option-card" onclick="__selectVendedora(${v.id})">
-            <div class="option-icon">${v.inicial}</div>
-            <div class="option-name">${v.nome}</div>
-          </div>
-        `;
-      });
-      html += '</div>';
-      html += '<button class="btn btn-secondary" onclick="__selectVendedora(0)" style="margin-top: 20px;">Não me lembro / Outro</button>';
-      return html;
-    }
+   function createVendedorasStep() {
+  let html = '<h2 class="step-title">Quem te atendeu?</h2>';
+  html += '<div class="options-grid">';
+  vendedoras.forEach(v => {
+    html += `
+      <div class="option-card" onclick="__selectVendedora(${v.id})">
+        <img src="${v.nome}.png" alt="${v.nome}" style="width:60px;height:60px;border-radius:50%;object-fit:cover;margin-bottom:10px;border:2px solid #007bff;">
+        <div class="option-name">${v.nome}</div>
+      </div>
+    `;
+  });
+  html += '</div>';
+  html += '<button class="btn btn-secondary" onclick="__selectVendedora(0)" style="margin-top: 20px;">Não me lembro / Outro</button>';
+  return html;
+}
 
     function createComoConheceuStep() {
       let html = '<h2 class="step-title">Como nos conheceu?</h2>';
