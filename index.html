@@ -23,11 +23,14 @@
     .step-info{color:#666;margin-bottom:20px;font-size:1.1em}
     .step-content{margin:40px 0}
     .step-title{font-size:2em;color:#333;margin-bottom:30px}
-    .options-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin:30px 0;aspect-ratio: 1 / 1;}
+    .options-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;margin:30px 0}
+    
+    /* ALTERAÇÕES AQUI: Tamanho do quadro */
     .option-card{
-      background:#f8f9fa;border:3px solid #e9ecef;border-radius:30px;padding:30px;cursor:pointer;
-      transition:all .3s ease;min-height:250px;display:flex;flex-direction:column;align-items:center;justify-content:center;aspect-ratio: 1 / 1;
+      background:#f8f9fa;border:3px solid #e9ecef;border-radius:15px;padding:20px;cursor:pointer;
+      transition:all .3s ease;min-height:180px;aspect-ratio: 1 / 1;display:flex;flex-direction:column;align-items:center;justify-content:center
     }
+    
     .option-card:hover{border-color:#007bff;background:#e3f2fd;transform:translateY(-5px);box-shadow:0 10px 20px rgba(0,0,0,.1)}
     .option-card.selected{border-color:#28a745;background:#d4edda}
     .option-icon{width:60px;height:60px;background:#007bff;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.5em;font-weight:bold;margin-bottom:15px}
@@ -67,7 +70,7 @@
       .container{padding:30px 20px;margin:10px}
       .header h1{font-size:2em}
       .options-grid{grid-template-columns:1fr;gap:15px}
-      .option-card{padding:70px;min-height:250px}
+      .option-card{padding:25px;min-height:100px}
       .star{font-size:2em}
       .buttons{flex-direction:column}
       .btn{width:100%}
@@ -78,7 +81,6 @@
   <button class="admin-btn" onclick="toggleAdmin()">Admin</button>
 
   <div class="container">
-    <!-- Tela Principal de Avaliação -->
     <div id="evaluation-screen">
       <div class="header">
         <h1>Avaliação de Atendimento</h1>
@@ -99,7 +101,6 @@
       </div>
     </div>
 
-    <!-- Tela de Sucesso -->
     <div id="success-screen" class="success-screen hidden">
       <div class="success-icon">✅</div>
       <h2 class="success-title">Avaliação Enviada!</h2>
@@ -109,7 +110,6 @@
       <button class="btn btn-success" onclick="newEvaluation()">Nova Avaliação</button>
     </div>
 
-    <!-- Painel Admin -->
     <div id="admin-screen" class="hidden">
       <div class="header">
         <h1>Painel Administrativo</h1>
@@ -124,15 +124,13 @@
         </div>
 
         <div id="evaluations-list" style="text-align: left; max-height: 400px; overflow-y: auto;">
-          <!-- Lista de avaliações -->
-        </div>
+          </div>
       </div>
 
       <button class="btn btn-secondary" onclick="toggleAdmin()" style="margin-top: 20px;">Voltar ao Formulário</button>
     </div>
   </div>
 
-  <!-- SUPABASE CLIENT: configure sua URL e ANON KEY -->
   <script type="module">
     import { createClient } from 'https://esm.sh/@supabase/supabase-js';
 
@@ -144,13 +142,12 @@
     window.supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   </script>
 
-  <!-- APP: lógica de UI + integrações -->
   <script type="module">
     // Usa o supabase global criado acima
     const supabase = window.supabase;
 
     /* =========================
-     *   DADOS ESTÁTICOS
+     * DADOS ESTÁTICOS
      * ========================= */
     const vendedoras = [
       { id: 1, nome: 'Jéssica',  inicial: 'J' },
@@ -167,7 +164,7 @@
     ];
 
     /* =========================
-     *   ESTADO DA AVALIAÇÃO
+     * ESTADO DA AVALIAÇÃO
      * ========================= */
     let currentStep = 1;
     let evaluationData = {
@@ -183,7 +180,7 @@
     };
 
     /* =========================
-     *   INICIALIZAÇÃO
+     * INICIALIZAÇÃO
      * ========================= */
     document.addEventListener('DOMContentLoaded', () => {
       showStep(1);
@@ -191,7 +188,7 @@
     });
 
     /* =========================
-     *   NAVEGAÇÃO DE ETAPAS
+     * NAVEGAÇÃO DE ETAPAS
      * ========================= */
     function showStep(step) {
       currentStep = step;
@@ -267,7 +264,7 @@
     }
 
     /* =========================
-     *   TELAS/ETAPAS (HTML)
+     * TELAS/ETAPAS (HTML)
      * ========================= */
    function createVendedorasStep() {
   let html = '<h2 class="step-title">Quem te atendeu?</h2>';
@@ -275,7 +272,7 @@
   vendedoras.forEach(v => {
     html += `
       <div class="option-card" onclick="__selectVendedora(${v.id})">
-        <img src="${v.nome}.png" alt="${v.nome}" style="width:90px;height:90px;border-radius:50%;object-fit:cover;margin-bottom:10px;border:2px solid #007bff;">
+        <img src="${v.nome}.png" alt="${v.nome}" style="width:110px;height:110px;border-radius:50%;object-fit:cover;margin-bottom:10px;border:2px solid #007bff;">
         <div class="option-name">${v.nome}</div>
       </div>
     `;
@@ -341,7 +338,7 @@
     }
 
     /* =========================
-     *   HANDLERS GLOBALIZADOS
+     * HANDLERS GLOBALIZADOS
      * ========================= */
     window.__selectVendedora = function(id) {
       evaluationData.vendedora = id;
@@ -365,7 +362,7 @@
     };
 
     /* =========================
-     *   SUBMISSÃO (SUPABASE)
+     * SUBMISSÃO (SUPABASE)
      * ========================= */
     async function submitEvaluation() {
       if (!evaluationData.avaliacaoGeral) {
@@ -403,7 +400,7 @@
     }
 
     /* =========================
-     *   ADMIN / RELATÓRIOS
+     * ADMIN / RELATÓRIOS
      * ========================= */
     async function loadAdminData() {
       const { data: evaluations, error } = await supabase
@@ -480,7 +477,7 @@
     }
 
     /* =========================
-     *   SUPORTE / UTILIDADES
+     * SUPORTE / UTILIDADES
      * ========================= */
     function resetEvaluation() {
       evaluationData = {
@@ -505,7 +502,7 @@
     }
 
     /* =========================
-     *   ADMIN TOGGLE
+     * ADMIN TOGGLE
      * ========================= */
     function toggleAdmin() {
       const evalScreen    = document.getElementById('evaluation-screen');
