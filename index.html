@@ -207,10 +207,10 @@
     
     // TikTok removido da lista
     const comoConheceu = [
-      { id: 1, nome: 'Google',         descricao: 'Pesquisou no Google',       inicial: 'G' },
-      { id: 2, nome: 'Instagram',      descricao: 'Viu no Instagram',          inicial: 'I' },
-      { id: 3, nome: 'Indicação',      descricao: 'Amigos ou conhecidos',      inicial: 'R' },
-      { id: 4, nome: 'Passei na Porta',descricao: 'Viu a loja fisicamente',    inicial: 'P' }
+      { id: 1, nome: 'Google',         descricao: 'Pesquisou no Google',       inicial: 'G', arquivo: 'Google.png' },
+      { id: 2, nome: 'Instagram',      descricao: 'Viu no Instagram',          inicial: 'I', arquivo: 'Instagram.png' },
+      { id: 3, nome: 'Indicação',      descricao: 'Amigos ou conhecidos',      inicial: 'R', arquivo: 'Indicacao.png' },
+      { id: 4, nome: 'Passei na Porta',descricao: 'Viu a loja fisicamente',    inicial: 'P', arquivo: 'Passei na Porta.png' }
     ];
 
     /* =========================
@@ -338,7 +338,7 @@
   comoConheceu.forEach(opt => {
     html += `
       <div class="option-card" onclick="__selectComoConheceu(${opt.id})">
-        <img src="${opt.nome}.png" alt="${opt.nome}" style="width:120px;height:120px;border-radius:15px;object-fit:cover;margin-bottom:10px;border:3px solid #FF69B4;">
+        <img src="${opt.arquivo}" alt="${opt.nome}" style="width:120px;height:120px;border-radius:15px;object-fit:cover;margin-bottom:10px;border:3px solid #FF69B4;">
         <div class="option-name">${opt.nome}</div>
         <div class="option-desc">${opt.descricao}</div>
       </div>
